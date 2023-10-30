@@ -1,4 +1,4 @@
-service_name: 'example'
+service_name: 'uc-flow-node'
 
 http:
   url: http://0.0.0.0:9000
