@@ -1,4 +1,4 @@
-service_name: 'uc-flow-node'
+service_name: '62a371e4-099a-4f46-931b-5e3a44727840'
 
 http:
   url: http://0.0.0.0:9000
@@ -15,8 +15,12 @@ uc_flow_node:
   register_on_start: false
   execute_view_queue_size: 500
   execute_view_workers: 5
-  private_url: https://bc90-178-209-118-100.ngrok.io
-  public_url: https://bc90-178-209-118-100.ngrok.io
+
+  private_url: https://normal-malamute-fitting.ngrok-free.app
+  public_url: https://normal-malamute-fitting.ngrok-free.app
+  
+
   uc_flow:
-    domain: https://uc-flow-v2-prod-api.comagic.ru
+    # domain: https://uc-flow-v2-pp-api.uis.st
+    domain: https://uc-flow-v2-pp-api.comagic.ru
     jwt_secret: 9109a79d-74f9-45bd-b369-5e7a885421e5s
