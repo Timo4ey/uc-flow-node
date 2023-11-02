@@ -19,4 +19,4 @@ class SumUp(BaseModel):
         return int(self.num_1)
 
     def sum_of_digits(self):
-        return self._num1_to_int() * self.num_2
+        return self._num1_to_int() + self.num_2
