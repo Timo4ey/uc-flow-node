@@ -8,6 +8,8 @@ from uc_flow_schemas.flow import Property, CredentialProtocol, RunState
 from uc_http_requester.requester import Request
 from uc_rest.ui.schemas import OptionValue
 
+from node.exceptions.SwitcherMustBeSet import SwitcherMustBeSet
+
 class NodeType(flow.NodeType):
     id: str = "62a371e4-099a-4f46-931b-5e3a44727840"
     type: flow.NodeType.Type = flow.NodeType.Type.action
@@ -54,7 +56,7 @@ class ExecuteView(execute.Execute):
     async def post(self, json: NodeRunContext) -> NodeRunContext:
         try:
             properties = json.node.data.properties
-            num_1, num_2, switcher = properties.get('num_1'), properties.get("num_2"), properties.get('switcher')
+            num_1, num_2, switcher = properties.get('num_1'), properties.get("num_2"), properties.get('switcher', '')
             result = int(num_1) + num_2
             match switcher:
                 case 'number':
@@ -65,6 +67,9 @@ class ExecuteView(execute.Execute):
                     await json.save_result(
                     {"result": str(result)}
                 )
+                case _:
+                    raise SwitcherMustBeSet('You must set switcher to string or number')
+                    
               
             json.state = RunState.complete
         except Exception as e:

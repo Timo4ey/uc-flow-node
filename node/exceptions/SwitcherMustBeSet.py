@@ -1,0 +1,2 @@
+class SwitcherMustBeSet(Exception):
+    pass
