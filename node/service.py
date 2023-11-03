@@ -8,7 +8,7 @@ from uc_flow_schemas.flow import Property, CredentialProtocol, RunState
 from uc_http_requester.requester import Request
 from uc_rest.ui.schemas import OptionValue
 
-from node.models.models import SumUp
+from node.models.models import SumUp, TwoFields
 
 
 
@@ -17,37 +17,52 @@ class NodeType(flow.NodeType):
     type: flow.NodeType.Type = flow.NodeType.Type.action
     name: str = "SumUp"
     displayName: str = "SumUp"
-    icon: str = '<svg><text x="8" y="50" font-size="50">🥸</text></svg>'
+    icon: str = '<svg><text x="8" y="50" font-size="50">🪪</text></svg>'
     description: str = "Example of SumUp"
     properties: List[Property] = [
         Property(
-            displayName="Введите число",
-            name="num_1",
-            type=Property.Type.STRING,
-            placeholder="Введите число в виде строки. Пример: 1",
-            description="Поле принимает строку",
-            required=True,
-            default="1",
-        ),
-        Property(
-            displayName="Введите число",
-            name="num_2",
-            type=Property.Type.NUMBER,
-            placeholder="Введите число. Пример: 2",
-            description="Поле принимает число",
-            required=True,
-            default=2,
-        ),
-        Property(
             displayName="Переключатель",
             name="switcher",
-            type=Property.Type.OPTIONS,
+            type=Property.Type.BOOLEAN,
+            required=True,
+            default=0,
+        
+        ),
+
+        Property(
+            displayName="Переключатель",
+            name="fields",
+            noDataExpression=True,
+            type=Property.Type.MULTI_OPTIONS,
             options=[
-                OptionValue(name="Число", value="number"),
-                OptionValue(name="Строка", value="string"),
+                OptionValue(name="Значение 1", value="1"),
+                OptionValue(name="Значение 2", value="2"),
             ],
             description="Выберите тип возвращаемых данных",
-            required=True,
+            displayOptions=flow.DisplayOptions(show={
+                'switcher': [True]
+            })
+        ),
+
+        Property(
+            displayName="“Значение 1”: Поле для ввода почты",
+            name="email",
+            noDataExpression=True,
+            type=Property.Type.EMAIL,
+            displayOptions=flow.DisplayOptions(show={
+                'switcher': [True],
+                'fields': ['1']
+            })
+        ),
+        Property(
+            displayName="“Значение 1”: Поле для ввода почты",
+            name="date",
+            noDataExpression=True,
+            type=Property.Type.DATETIME,
+            displayOptions=flow.DisplayOptions(show={
+                'switcher': [True],
+                'fields': ['2']
+            })
         ),
     ]
 
@@ -61,18 +76,13 @@ class ExecuteView(execute.Execute):
     async def post(self, json: NodeRunContext) -> NodeRunContext:
         try:
             properties = json.node.data.properties
-            sum_up_model = SumUp(
-                num_1=properties.get("num_1"),
-                num_2=properties.get("num_2"),
-                switcher=properties.get("switcher"),
-            )
-            result = sum_up_model.sum_of_digits()
+            result = TwoFields(switcher=properties.get('switcher'),
+                      email=properties.get('email'),
+                      date=properties.get('date'),
+                      )
+   
+            await json.save_result({"result": result.json()})
 
-            match sum_up_model.switcher:
-                case "number":
-                    await json.save_result({"result": result})
-                case "string":
-                    await json.save_result({"result": str(result)})
 
             json.state = RunState.complete
         except Exception as e:

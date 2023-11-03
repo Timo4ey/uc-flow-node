@@ -1,6 +1,7 @@
 from typing import Literal
 from pydantic import BaseModel, Field, validator
 import re
+from datetime import datetime
 
 class SumUp(BaseModel):
     num_1: str = Field(min_length=1)
@@ -19,3 +20,18 @@ class SumUp(BaseModel):
 
     def sum_of_digits(self):
         return self._num1_to_int() + self.num_2
+
+
+class TwoFields(BaseModel):
+    switcher: bool
+    email: str = None
+    date: datetime = None
+
+
+    @validator("email")
+    def validate_email(cls, value):
+        check = re.match(r'^[\w+\.]+@([\w-]+\.)+[\w+]{2,4}$', value) if value else True
+        if not check:
+            raise ValueError("Email is not correct")
+        return value
+
