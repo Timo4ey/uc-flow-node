@@ -1,7 +1,6 @@
 from typing import Literal
-from pydantic import BaseModel, root_validator, Field, validator
+from pydantic import BaseModel, Field, validator
 import re
-
 
 class SumUp(BaseModel):
     num_1: str = Field(min_length=1)
