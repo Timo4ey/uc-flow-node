@@ -66,8 +66,8 @@ class NodeType(flow.NodeType):
             type=Property.Type.EMAIL,
             displayOptions=flow.DisplayOptions(show={
                 'switcher': [True],
-                'field_1': ['field_1_1'],
-                'field_2': ['field_2_1'],
+                'field_1': [Field1.value_1],
+                'field_2': [Field2.value_1],
             })
         ),
         Property(
@@ -77,8 +77,8 @@ class NodeType(flow.NodeType):
             type=Property.Type.DATETIME,
             displayOptions=flow.DisplayOptions(show={
                 'switcher': [True],
-                'field_1': ['field_1_2'],
-                'field_2': ['field_2_2']
+                'field_1': [Field1.value_2],
+                'field_2': [Field2.value_2]
             })
         ),
     ]
